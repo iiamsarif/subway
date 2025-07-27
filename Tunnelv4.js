@@ -35,8 +35,12 @@ ws.on("message", async (data) => {
     }
 
 if (isBase64) {
-  res.status(status).json({ base64: body });
-} else {
+  const buffer = Buffer.from(body, 'base64');
+  res.setHeader('Content-Type', responseHeaders['content-type'] || 'application/pdf');
+  res.setHeader('Content-Disposition', responseHeaders['content-disposition'] || 'attachment; filename="file.pdf"');
+  res.status(status).send(buffer); // ✅ Send actual binary
+}
+ else {
   // Try to parse as JSON safely, or wrap as string
   try {
     const parsed = JSON.parse(body);
