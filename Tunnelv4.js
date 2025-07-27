@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 const clients = {};
 
 app.use(bodyParser.json());
-app.use(bodyParser.text({ type: 'text/html' }));
+app.use(bodyParser.text({ type: 'text/html', limit: '10mb' }));
 
 const wss = new WebSocketServer({ noServer: true });
 
