@@ -43,12 +43,18 @@ if (isBase64) {
 
  else {
   // Try to parse as JSON safely, or wrap as string
-  try {
+try {
+  // If Content-Type is application/json, parse it
+  if (headers["content-type"] && headers["content-type"].includes("application/json")) {
     const parsed = JSON.parse(body);
     res.status(status).json(parsed);
-  } catch {
-    res.status(status).json({ text: body });
+  } else {
+    res.status(status).send(body); // Just send the raw text
   }
+} catch {
+  res.status(status).send(body); // Fallback
+}
+
 }
 
 
