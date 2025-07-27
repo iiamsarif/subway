@@ -34,12 +34,18 @@ ws.on("message", async (data) => {
       }
     }
 
-    if (isBase64) {
-      const buffer = Buffer.from(body, 'base64');
-      res.status(status).send(buffer); // ✅ send binary buffer
-    } else {
-      res.status(status).send(body);
-    }
+if (isBase64) {
+  res.status(status).json({ base64: body });
+} else {
+  // Try to parse as JSON safely, or wrap as string
+  try {
+    const parsed = JSON.parse(body);
+    res.status(status).json(parsed);
+  } catch {
+    res.status(status).json({ text: body });
+  }
+}
+
 
     delete pending[id];
   }
