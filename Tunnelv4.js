@@ -21,16 +21,30 @@ wss.on("connection", (ws) => {
     delete clients[id];
   });
 
-  ws.on("message", async (data) => {
-    const message = JSON.parse(data);
-    const { id, status, body } = message;
+ws.on("message", async (data) => {
+  const message = JSON.parse(data);
+  const { id, status, body, isBase64, headers } = message;
 
-    // Forward response to original HTTP requester
-    if (pending[id]) {
-      pending[id].res.status(status).send(body);
-      delete pending[id];
+  if (pending[id]) {
+    const res = pending[id].res;
+
+    if (headers) {
+      for (const [key, value] of Object.entries(headers)) {
+        res.setHeader(key, value);
+      }
     }
-  });
+
+    if (isBase64) {
+      const buffer = Buffer.from(body, 'base64');
+      res.status(status).send(buffer); // ✅ send binary buffer
+    } else {
+      res.status(status).send(body);
+    }
+
+    delete pending[id];
+  }
+});
+
 });
 
 const pending = {};
