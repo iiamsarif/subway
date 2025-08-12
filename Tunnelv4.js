@@ -13,9 +13,6 @@ app.use(bodyParser.text({ type: 'text/html', limit: '10mb' }));
 
 const wss = new WebSocketServer({ noServer: true });
 
-app.get("/",(req,res)=>{
-  res.send("Server is running!"");
-});
 
 wss.on("connection", (ws) => {
   const id = uuid();
@@ -99,6 +96,7 @@ server.on("upgrade", (req, socket, head) => {
     wss.emit("connection", ws, req);
   });
 });
+
 
 
 
