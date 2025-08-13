@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const clients = {};
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.text({ type: 'text/html', limit: '10mb' }));
 
 const wss = new WebSocketServer({ noServer: true });
@@ -96,6 +96,7 @@ server.on("upgrade", (req, socket, head) => {
     wss.emit("connection", ws, req);
   });
 });
+
 
 
 
