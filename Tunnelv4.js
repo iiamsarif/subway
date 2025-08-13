@@ -13,7 +13,7 @@ app.use(bodyParser.text({ type: 'text/html', limit: '10mb' }));
 
 const wss = new WebSocketServer({ 
   noServer: true,
-  maxPayload: 200 * 1024 * 1024 // 200 MB
+maxPayload: 50 * 1024 * 1024
 });
 
 
@@ -100,6 +100,7 @@ server.on("upgrade", (req, socket, head) => {
     wss.emit("connection", ws, req);
   });
 });
+
 
 
 
