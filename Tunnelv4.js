@@ -11,7 +11,11 @@ const clients = {};
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.text({ type: 'text/html', limit: '10mb' }));
 
-const wss = new WebSocketServer({ noServer: true });
+const wss = new WebSocketServer({ 
+  noServer: true,
+  maxPayload: 200 * 1024 * 1024 // 200 MB
+});
+
 
 
 wss.on("connection", (ws) => {
@@ -96,6 +100,7 @@ server.on("upgrade", (req, socket, head) => {
     wss.emit("connection", ws, req);
   });
 });
+
 
 
 
