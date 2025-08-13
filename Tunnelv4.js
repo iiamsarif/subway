@@ -9,11 +9,11 @@ const port = process.env.PORT || 3000;
 const clients = {};
 
 app.use(bodyParser.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(bodyParser.text({ type: 'text/html', limit: '10mb' }));
 
 const wss = new WebSocketServer({ 
-  noServer: true,
-maxPayload: 50 * 1024 * 1024
+  noServer: true
 });
 
 
@@ -100,6 +100,7 @@ server.on("upgrade", (req, socket, head) => {
     wss.emit("connection", ws, req);
   });
 });
+
 
 
 
